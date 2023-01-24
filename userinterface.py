@@ -42,21 +42,22 @@ try:
 
     # ボタンの作成と配置
     button1 = tk.Button(root, text="決定", command=btn_clicked)
-    button1.place(x=10, y=20, width=100, height=50)
+    button1.place(x=10, y=20, width=10, height=10)
     root.minsize(width=500, height=500)
     root.title('レシート家計簿')
     input = tk.Entry(width=20)
     input.insert(0, "ここに値を入力")
     input.place(x=200, y=10)
     label = tk.Label(root, text='', font=('System', 24))
-    label.place(x=0, y=80)
+    label.place(x=300, y=10)
 
 
 
     # ラベル
     txt = tk.Label(text='何日間の合計を知りたいですか？')
     txt.place(x=10, y=10)
-    
+    txt2 = tk.Label(text="個別にデータを追加")
+    txt2.place(x=10,y=100)
     # メインループ
     root.mainloop()
 
