@@ -13,7 +13,6 @@ def btn_clicked():
 
     date = datetime.datetime.now()
     date = date+datetime.timedelta(days=-int(day))
-    print(date)
     param = (date,)
 
     cursor.execute(sql, param)
@@ -28,9 +27,18 @@ def btn2_clicked():
     FROM    receipt
     WHERE   created_at > %s
     ''')
+
 def btn3_clicked():
-    value=value2_input.get()
+    value = value2_input.get()
     marchandise = data2_input.get()
+    date = day.get()
+    sql = ('''
+    SELECT  SUM(value)
+    FROM    receipt
+    WHERE   created_at > %s
+    ''')
+
+
     
 cnx = None
 day=-1
@@ -77,15 +85,20 @@ try:
     button2 = tk.Button(root, text="追加", command=btn2_clicked)
     button2.place(x=400, y=45, width=50, height=30)
     button3= tk.Button(root, text="追加", command=btn3_clicked)
-    button3.place(x=40, y=100, width=50, height=30)
-    data2_input = tk.Entry(width=14)
+    button3.place(x=300, y=95, width=50, height=30)
+    data2_input = tk.Entry(width=12)
     data2_input.insert(0, "商品名を入力")
-    data2_input.place(x=200, y=80)
-    value2_input = tk.Entry(width=14)
+    data2_input.place(x=220, y=100)
+    value2_input = tk.Entry(width=10)
     value2_input.insert(0, "値段を入力")
-    value2_input.place(x=300, y=80)
-    day_input= tk.Entry(width=14)
-    day_input.place(x=10, y=80)
+    value2_input.place(x=150, y=100)
+    day_input= tk.Entry(width=12)
+    day_input.place(x=70, y=100)
+    day_input.insert(0, "x日ごとに購入")
+    txt2 = tk.Label(text="定期購入")
+    txt2.place(x=10,y=97)
+    
+
     
    
     # メインループ
