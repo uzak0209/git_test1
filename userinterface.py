@@ -20,7 +20,7 @@ def btn_clicked():
     sum=cursor.fetchall()
     label['text'] = sum
    
-def bottun2_clicked():
+def btn2_clicked():
     value=value_input.get()
     marchandise = data_input.get()
     sql = ('''
@@ -28,7 +28,9 @@ def bottun2_clicked():
     FROM    receipt
     WHERE   created_at > %s
     ''')
-    
+def btn3_clicked():
+    value=value2_input.get()
+    marchandise = data2_input.get()
     
 cnx = None
 day=-1
@@ -37,7 +39,7 @@ try:
         user='uzak',  # ユーザー名
             password='Skakki0209@',  # パスワード
             db='mysql',
-            host='10.101.68.90'  # ホスト名(IPアドレス）
+            host='192.168.0.12'  # ホスト名(IPアドレス）
         )
 
     if cnx.is_connected:
@@ -62,7 +64,7 @@ try:
 
 
     # ラベル
-    txt = tk.Label(text='何日間の合計を知りたいですか？')
+    txt = tk.Label(text='何日間のデータを知りたいですか？')
     txt.place(x=10, y=10)
     txt2 = tk.Label(text="個別にデータを追加")
     txt2.place(x=10,y=50)
@@ -73,7 +75,18 @@ try:
     value_input.insert(0, "値段を入力")
     value_input.place(x=300, y=50)
     button2 = tk.Button(root, text="追加", command=btn2_clicked)
-    button2.place(x=450, y=50, width=50, height=30)
+    button2.place(x=400, y=45, width=50, height=30)
+    button3= tk.Button(root, text="追加", command=btn3_clicked)
+    button3.place(x=40, y=100, width=50, height=30)
+    data2_input = tk.Entry(width=14)
+    data2_input.insert(0, "商品名を入力")
+    data2_input.place(x=200, y=80)
+    value2_input = tk.Entry(width=14)
+    value2_input.insert(0, "値段を入力")
+    value2_input.place(x=300, y=80)
+    day_input= tk.Entry(width=14)
+    day_input.place(x=10, y=80)
+    
    
     # メインループ
     root.mainloop()
@@ -85,4 +98,3 @@ finally:
         cnx.close()
 cursor.close() 
 
-    
