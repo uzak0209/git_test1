@@ -2,6 +2,7 @@
 import tkinter as tk
 import mysql.connector
 import datetime
+import pandas as pd
 def btn_clicked():
 
     day=input.get()
@@ -13,15 +14,44 @@ def btn_clicked():
 
     date = datetime.datetime.now()
     date = date+datetime.timedelta(days=-int(day))
-    print(date)
     param = (date,)
 
     cursor.execute(sql, param)
     sum=cursor.fetchall()
     label['text'] = sum
-   
+    sql = ('''
+    SELECT  *
+    FROM    receipt
+    WHERE   created_at > %s
+    ''')
+    cursor.execute(sql,param )
+    data=cursor.fetchall()
+
+    listbox["listvariable"] = tk.StringVar(value=data)
+    
 
     
+
+def btn2_clicked():
+    value=value_input.get()
+    marchandise = data_input.get()
+    sql = ('''
+    SELECT  SUM(value)
+    FROM    receipt
+    WHERE   created_at > %s
+    ''')
+
+def btn3_clicked():
+    value = value2_input.get()
+    marchandise = data2_input.get()
+    date = day.get()
+    sql = ('''
+    SELECT  SUM(value)
+    FROM    receipt
+    WHERE   created_at > %s
+    ''')
+
+
     
 cnx = None
 day=-1
@@ -30,7 +60,7 @@ try:
         user='uzak',  # ユーザー名
             password='Skakki0209@',  # パスワード
             db='mysql',
-            host='10.101.68.90'  # ホスト名(IPアドレス）
+            host='192.168.0.12'  # ホスト名(IPアドレス）
         )
 
     if cnx.is_connected:
@@ -41,23 +71,54 @@ try:
     root = tk.Tk()
 
     # ボタンの作成と配置
-    button1 = tk.Button(root, text="決定", command=btn_clicked)
-    button1.place(x=10, y=20, width=10, height=10)
     root.minsize(width=500, height=500)
+    button1 = tk.Button(root, text="決定", command=btn_clicked)
+    button1.place(x=300, y=10, width=50, height=30)
+   
     root.title('レシート家計簿')
-    input = tk.Entry(width=20)
+    input = tk.Entry(width=14)
     input.insert(0, "ここに値を入力")
-    input.place(x=200, y=10)
+    input.place(x=200, y=14)
     label = tk.Label(root, text='', font=('System', 24))
-    label.place(x=300, y=10)
+    label.place(x=370, y=300)
 
 
 
     # ラベル
-    txt = tk.Label(text='何日間の合計を知りたいですか？')
+    txt = tk.Label(text='何日間のデータを知りたいですか？')
     txt.place(x=10, y=10)
     txt2 = tk.Label(text="個別にデータを追加")
-    txt2.place(x=10,y=100)
+    txt2.place(x=10,y=50)
+    data_input = tk.Entry(width=14)
+    data_input.insert(0, "商品名を入力")
+    data_input.place(x=200, y=50)
+    value_input = tk.Entry(width=14)
+    value_input.insert(0, "値段を入力")
+    value_input.place(x=300, y=50)
+    button2 = tk.Button(root, text="追加", command=btn2_clicked)
+    button2.place(x=400, y=45, width=50, height=30)
+    button3= tk.Button(root, text="追加", command=btn3_clicked)
+    button3.place(x=300, y=95, width=50, height=30)
+    data2_input = tk.Entry(width=12)
+    data2_input.insert(0, "商品名を入力")
+    data2_input.place(x=220, y=100)
+    value2_input = tk.Entry(width=10)
+    value2_input.insert(0, "値段を入力")
+    value2_input.place(x=150, y=100)
+    day_input= tk.Entry(width=12)
+    day_input.place(x=70, y=100)
+    day_input.insert(0, "x日ごとに購入")
+    txt2 = tk.Label(text="定期購入")
+    txt2.place(x=10,y=97)
+    lists = tk.StringVar(value="")
+    listbox = tk.Listbox(root, listvariable=lists, height=13 , width=50)
+    
+    listbox.place(x=10, y=200)
+    scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL, command=listbox.yview)
+    listbox["yscrollcommand"] = scrollbar.set
+    scrollbar.place(x=314, y=200, height=210)
+    
+   
     # メインループ
     root.mainloop()
 
@@ -68,4 +129,3 @@ finally:
         cnx.close()
 cursor.close() 
 
-    
