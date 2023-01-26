@@ -2,6 +2,7 @@
 import tkinter as tk
 import mysql.connector
 import datetime
+import pandas as pd
 def btn_clicked():
 
     day=input.get()
@@ -18,7 +19,19 @@ def btn_clicked():
     cursor.execute(sql, param)
     sum=cursor.fetchall()
     label['text'] = sum
-   
+    sql = ('''
+    SELECT  *
+    FROM    receipt
+    WHERE   created_at > %s
+    ''')
+    cursor.execute(sql,param )
+    data=cursor.fetchall()
+
+    listbox["listvariable"] = tk.StringVar(value=data)
+    
+
+    
+
 def btn2_clicked():
     value=value_input.get()
     marchandise = data_input.get()
@@ -67,7 +80,7 @@ try:
     input.insert(0, "ここに値を入力")
     input.place(x=200, y=14)
     label = tk.Label(root, text='', font=('System', 24))
-    label.place(x=300, y=10)
+    label.place(x=370, y=300)
 
 
 
@@ -97,8 +110,13 @@ try:
     day_input.insert(0, "x日ごとに購入")
     txt2 = tk.Label(text="定期購入")
     txt2.place(x=10,y=97)
+    lists = tk.StringVar(value="")
+    listbox = tk.Listbox(root, listvariable=lists, height=13 , width=50)
     
-
+    listbox.place(x=10, y=200)
+    scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL, command=listbox.yview)
+    listbox["yscrollcommand"] = scrollbar.set
+    scrollbar.place(x=314, y=200, height=210)
     
    
     # メインループ
